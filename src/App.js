@@ -1,4 +1,4 @@
-// import GlobalStyle from './GlobalStyle';
+import GlobalStyle from './GlobalStyle';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
@@ -14,11 +14,10 @@ import Info from './Pages/MyPage/Info';
 import Bookmarks from './Pages/MyPage/Bookmarks';
 import Edit from './Pages/Article/Edit';
 
-
 function App() {
   //* 로그인 후 받은 id
   const [myId, setMyId] = useState('');
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [isMember, setIsMember] = useState(false);
   // 컴포넌트가 렌더링된 후  불러온 게시물 10개
@@ -61,13 +60,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* <GlobalStyle /> */}
+      <GlobalStyle />
       <Navbar
         isLogin={isLogin}
         logoutHandler={logoutHandler}
         openLoginModalHandler={openLoginModalHandler}
       >
-        { isLogin ? (
+        {isLogin ? (
           <ul className="loggedin-menu">
             <Link to="mypage">
               <li>마이페이지</li>
@@ -124,13 +123,15 @@ function App() {
           }
         >
           <Route index element={<Info />} isLogin={isLogin} />
-          <Route path="info" element={<Info />} isLogin={isLogin}/>
+          <Route path="info" element={<Info />} isLogin={isLogin} />
           <Route path="logs/*" element={<Logs />} isLogin={isLogin} />
-          <Route path="bookmarks/*" element={<Bookmarks />} isLogin={isLogin}/>
+          <Route path="bookmarks/*" element={<Bookmarks />} isLogin={isLogin} />
         </Route>
         <Route
           path="write"
-          element={<Write setCurrentArticle={setCurrentArticle} isLogin={isLogin} />}
+          element={
+            <Write setCurrentArticle={setCurrentArticle} isLogin={isLogin} />
+          }
         />
         <Route
           path="notfound"

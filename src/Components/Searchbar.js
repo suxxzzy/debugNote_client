@@ -2,20 +2,52 @@ import { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
+const Box = styled.div`
+  border: 1px solid blue;
+  width: 100%;
+  height: 28rem;
+  display: flex;
+  flex-direction: column;
+`;
+const Home = styled.section`
+  /* border: 1px solid red; */
+  width: 100%;
+  flex: 4;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  > div:not(.logo) {
+    /* width: 45%; */
+    font-size: 3rem;
+    font-weight: bold;
+    /* border: 1px solid red; */
+  }
+  > .logo {
+    font-family: 'Abril Fatface', cursive;
+    color: #8fbc8f;
+    font-size: 3rem;
+  }
+`;
+
 const SearchSection = styled.div`
   border: 1px solid pink;
+  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  > select {
-    width: 6rem;
-    height: 2rem;
-    padding: 0.4rem;
-  }
+  flex: 2;
+  justify-content: flex-start;
+  align-items: flex-start;
   > .input-icon-wrapper {
+    border: 1px solid red;
+    > select {
+      border: none;
+      background-color: none;
+      width: 6rem;
+      height: 2rem;
+      padding: 0.4rem;
+    }
     margin-left: 40px;
     border: 1px solid #e0e0e0;
-    border-radius: 20px;
     width: 50%;
     height: 2.7rem;
     display: flex;
@@ -40,11 +72,7 @@ const SearchSection = styled.div`
   }
 `;
 
-export default function Searchbar({
-  currentPage,
-  setLoadedArticles,
-  setTotalArticles,
-}) {
+export default function Searchbar({ setLoadedArticles }) {
   //검색 옵션 상태 관리
   const [option, setOption] = useState('제목');
   const optionChangeHandler = event => {
@@ -62,9 +90,9 @@ export default function Searchbar({
     if (searchKeyword === '') return;
     let endpoint;
     if (searchOption === '제목') {
-      endpoint = `http://15.164.104.171:80/search?titles=${searchKeyword}&search_type=titles&pages=${currentPage}&limit=10`;
+      endpoint = `http://15.164.104.171:80/search?titles=${searchKeyword}&search_type=titles`;
     } else {
-      endpoint = `http://15.164.104.171:80/search?contents=${searchKeyword}&search_type=contents&pages=${currentPage}&limit=10`;
+      endpoint = `http://15.164.104.171:80/search?contents=${searchKeyword}&search_type=contents`;
     }
 
     //검색창 비우기
@@ -78,8 +106,7 @@ export default function Searchbar({
       .then(response => {
         if (response.status === 201) {
           //서버에 요청 보내기 성공하여 데이터를 잘 받아옴.
-          setLoadedArticles(response.data.findBoard.rows);
-          setTotalArticles(response.data.findBoard.count);
+          setLoadedArticles(response.data.findBoard);
         } else {
           //서버에 요청 보내기 실패하였음. 검색결과 없다고 할것
           console.log('검색결과없음');
@@ -106,23 +133,29 @@ export default function Searchbar({
   };
 
   return (
-    <SearchSection>
-      <select onChange={optionChangeHandler}>
-        <option value="제목">제목</option>
-        <option value="내용">내용</option>
-      </select>
-      <div className="input-icon-wrapper">
-        <input
-          placehoder="검색어를 입력하세요"
-          type="text"
-          value={searchKeyword}
-          onChange={searchInputChangeHandler}
-          onKeyPress={KeyPressHandler}
-        ></input>
-        <div onClick={searchClickHandler}>
-          <i className="fa-solid fa-magnifying-glass"></i>
+    <Box>
+      <Home>
+        <div>에러 로그 공유 플랫폼,</div>
+        <div className="logo">DebugNote .</div>
+      </Home>
+      <SearchSection>
+        <div className="input-icon-wrapper">
+          <select onChange={optionChangeHandler}>
+            <option value="제목">제목</option>
+            <option value="내용">내용</option>
+          </select>
+          <input
+            placehoder="검색어를 입력하세요"
+            type="text"
+            value={searchKeyword}
+            onChange={searchInputChangeHandler}
+            onKeyPress={KeyPressHandler}
+          ></input>
+          <div onClick={searchClickHandler}>
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </div>
         </div>
-      </div>
-    </SearchSection>
+      </SearchSection>
+    </Box>
   );
 }
