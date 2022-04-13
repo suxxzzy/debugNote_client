@@ -17,7 +17,7 @@ import Edit from './Pages/Article/Edit';
 function App() {
   //* 로그인 후 받은 id
   const [myId, setMyId] = useState('');
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isMember, setIsMember] = useState(false);
   // 컴포넌트가 렌더링된 후  불러온 게시물 10개
